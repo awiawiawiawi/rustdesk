@@ -284,6 +284,9 @@ jobs:
 
       - name: Build rustdesk
         run: |
+          # RL custom: bake our self-hosted server + key
+          (Get-Content libs/hbb_common/src/config.rs) -replace 'rs-ny\.rustdesk\.com','37.27.34.113' -replace 'OeVuKk5nlHiXp\+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=','VZ+0B5ddRPBpjw6xLYQHCe3rhu6kv8JOP9tHhxgFBv8=' | Set-Content libs/hbb_common/src/config.rs
+          Get-Content libs/hbb_common/src/config.rs | Select-String 'RENDEZVOUS_SERVERS|RS_PUB_KEY'
           # Windows: build RustDesk
           # --hwcodec is shared by all Windows targets; per-target extras (e.g. --vram) come from the matrix
           python3 .\build.py --portable --flutter --skip-portable-pack --hwcodec ${{ matrix.job.build-args }}
