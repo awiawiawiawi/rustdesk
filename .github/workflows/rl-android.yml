@@ -134,7 +134,7 @@ jobs:
       - name: RL bake self-hosted server + key into config.rs
         shell: bash
         run: |
-          sed -i 's#rs-ny.rustdesk.com#82.166.23.44#g' libs/hbb_common/src/config.rs
+          sed -i 's#"rs-ny.rustdesk.com"#"10.0.44.170", "82.166.23.44"#g' libs/hbb_common/src/config.rs
           sed -i 's#OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=#LfbwSshuO7VIFsiKhOR6hE8aSBZdUIf8dOwMNHFYRgg=#g' libs/hbb_common/src/config.rs
           echo '=== baked ==='; grep -nE 'RENDEZVOUS_SERVERS|RS_PUB_KEY' libs/hbb_common/src/config.rs
       - name: Install flutter
