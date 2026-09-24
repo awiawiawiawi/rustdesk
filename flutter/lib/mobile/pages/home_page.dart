@@ -8,6 +8,7 @@ import '../../common/widgets/chat_page.dart';
 import '../../models/platform_model.dart';
 import '../../models/state_model.dart';
 import 'connection_page.dart';
+import 'console_devices_page.dart';
 
 abstract class PageShape extends Widget {
   final String title = "";
@@ -47,6 +48,8 @@ class HomePageState extends State<HomePage> {
 
   void initPages() {
     _pages.clear();
+    // RL: technician device list (live list from the console + tap-to-connect) as the first tab.
+    _pages.add(ConsoleDevicesPage());
     if (!bind.isIncomingOnly()) {
       _pages.add(ConnectionPage(
         appBarActions: [],
