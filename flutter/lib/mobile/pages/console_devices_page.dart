@@ -193,10 +193,14 @@ class _ConsoleDevicesPageState extends State<ConsoleDevicesPage> {
     final id = (d['id'] ?? '').toString();
     if (id.isEmpty) return;
     final pw = (d['pw'] ?? '').toString();
-    final relay = _ep?.relay ?? '82.166.23.44';
-    // On the external console, force the connection through the external relay.
-    // On the internal console, the server-advertised (internal) relay works as-is.
-    final target = (_ep?.base.startsWith('https') ?? false) ? '$id/r@$relay' : id;
+    // Pick a relay BOTH sides can reach, based on where the customer device is:
+    //  - customer on our LAN (ping.internal) -> internal relay (direct, no NAT hairpin)
+    //  - customer off-LAN                    -> external relay (already-open relay port)
+    // The technician is always inside our network (console reached internally).
+    final ping = d['ping'] is Map ? d['ping'] as Map : null;
+    final custInternal = ping != null && ping['internal'] == true;
+    final relay = custInternal ? '10.0.44.170' : '82.166.23.44';
+    final target = '$id/r@$relay';
     connect(context, target, password: pw.isNotEmpty ? pw : 'RL123456');
   }
 
